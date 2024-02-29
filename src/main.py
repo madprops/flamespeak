@@ -40,7 +40,7 @@ def main():
 
     assistant.prepare_assistant()
     check_time("Prepare Assistant")
-    utils.msg("Starting Conversation...\n")
+    utils.msg(utils.colortext("green", "Starting Conversation\n"))
 
     assistant.start_conversation()
 
