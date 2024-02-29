@@ -31,7 +31,8 @@ class ArgParser:
             if key in aliases:
                 names += aliases[key]
 
-            tail = {key: value for key, value in item.items() if value is not None}
+            tail = {key: value for key,
+                    value in item.items() if value is not None}
             parser.add_argument(*names, **tail)
 
         self.args = parser.parse_args()

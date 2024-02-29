@@ -2,6 +2,7 @@
 from argparser import ArgParser
 from typing import Dict, Any
 
+
 class Config:
     # Class to hold all the configuration of the program
     # It also interfaces with ArgParser and processes further
@@ -16,6 +17,8 @@ class Config:
         self.color_2 = "green"
         self.verbose = False
         self.nocolors = False
+        self.spacing = 1
+        self.nobreaks = False
 
     class Internal:
         # Argument definitions
@@ -29,21 +32,24 @@ class Config:
             "avatar-2": {"type": str, "help": "The assistant's avatar"},
             "nocolors": {"action": "store_true", "help": "Don't use colors"},
             "verbose": {"action": "store_true", "help": "Verbose output"},
+            "spacing": {"type": int, "help": "Number of spaces between messages"},
+            "nobreaks": {"action": "store_true", "help": "Remove all linebreaks"},
         }
 
         aliases = {}
 
     def parse_args(self) -> None:
-        ap = ArgParser("Flamespeak", self.Internal.arguments, self.Internal.aliases, self)
+        ap = ArgParser("Flamespeak", self.Internal.arguments,
+                       self.Internal.aliases, self)
 
-        ap.normal("model")
-        ap.normal("name_1")
-        ap.normal("name_2")
-        ap.normal("color_1")
-        ap.normal("color_2")
-        ap.normal("avatar_1")
-        ap.normal("avatar_2")
-        ap.normal("nocolors")
-        ap.normal("verbose")
+        normals = [
+            "model", "name_1", "name_2", "color_1", "color_2",
+            "avatar_1", "avatar_2", "nocolors", "verbose", "spacing",
+            "nobreaks",
+        ]
+
+        for normal in normals:
+            ap.normal(normal)
+
 
 config = Config()

@@ -26,7 +26,7 @@ def get_response(prompt: str) -> str:
     text = ""
 
     if choices:
-        text = choices[0].get("text", "").strip()
+        text = choices[0].get("text", "")
         text = clean_response(text)
 
     return text
@@ -47,8 +47,13 @@ def check_command(prompt: str) -> bool:
 
 
 def start_conversation() -> None:
+    n = 0
+
     while True:
         try:
+            if n > 0:
+                add_spaces()
+
             prompt = get_prompt()
 
             if check_command(prompt):
@@ -57,8 +62,10 @@ def start_conversation() -> None:
             response = get_response(prompt)
 
             if response:
-                name = get_name(2)
-                utils.respond(f"{name}: {response}")
+                add_spaces()
+                respond(get_name(2), response)
+
+            n += 1
         except KeyboardInterrupt:
             utils.exit("Keyboard Interrupt")
 
@@ -73,9 +80,12 @@ def clean_response(text: str) -> str:
     match = re.match(pattern, text)
 
     if match:
-        return text.lstrip(match.group("noise"))
-    else:
-        return text
+        text = text.lstrip(match.group("noise"))
+
+    if config.nobreaks:
+        text = text.replace("\n", " ")
+
+    return text.strip()
 
 
 def get_name(num: int) -> str:
@@ -93,3 +103,15 @@ def get_name(num: int) -> str:
         name = f"{avatar} {name}"
 
     return name
+
+
+def respond(name: str, message: str) -> None:
+    utils.respond(f"{name}: {message}")
+
+
+def add_spaces():
+    if config.spacing <= 0:
+        return
+
+    for _ in range(config.spacing):
+        utils.respond("")
