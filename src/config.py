@@ -23,6 +23,8 @@ class Config:
         self.spacing = 1
         self.nobreaks = False
         self.nointro = False
+        self.max_tokens = 100
+        self.temperature = 0.8
 
     class Internal:
         # Time when program started
@@ -42,6 +44,8 @@ class Config:
             "spacing": {"type": int, "help": "Number of spaces between messages"},
             "no-breaks": {"action": "store_true", "help": "Remove all linebreaks"},
             "no-intro": {"action": "store_true", "help": "Don't show the intro messages"},
+            "max-tokens": {"type": int, "help": "Max tokens to use in a single request"},
+            "temperature": {"type": float, "help": "The temperature to use in the model"},
         }
 
         aliases = {}
@@ -53,7 +57,7 @@ class Config:
         normals = [
             "model", "name_1", "name_2", "color_1", "color_2",
             "avatar_1", "avatar_2", "nocolors", "verbose", "spacing",
-            "no_breaks", "no_intro",
+            "no_breaks", "no_intro", "max_tokens", "temperature",
         ]
 
         for normal in normals:

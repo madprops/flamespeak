@@ -21,7 +21,12 @@ def prepare_model() -> None:
 
 
 def get_response(prompt: str) -> str:
-    response = model(prompt)
+    response = model(
+        prompt=prompt,
+        max_tokens=config.max_tokens,
+        temperature=config.temperature,
+    )
+
     choices = response.get("choices")
     text = ""
 
