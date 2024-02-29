@@ -56,6 +56,8 @@ def start_conversation() -> None:
 
     while True:
         try:
+            prompt = ""
+
             if n > 0:
                 add_spaces()
 
@@ -72,7 +74,10 @@ def start_conversation() -> None:
 
             n += 1
         except KeyboardInterrupt:
-            utils.exit("Keyboard Interrupt")
+            if not prompt:
+                utils.exit("Keyboard Interrupt")
+            else:
+                print("\nInterrupted 😝\n")
 
 
 def get_prompt() -> str:
