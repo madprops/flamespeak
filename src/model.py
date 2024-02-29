@@ -22,29 +22,34 @@ def prepare_model() -> None:
     )
 
 
-def get_response(prompt: str) -> str:
+def stream_response(prompt: str):
     messages = [
         {"role": "system", "content": f"You are a guy called {config.name_2}"},
         {
             "role": "user",
             "content": prompt,
-        }
+        },
     ]
 
-    response = model.create_chat_completion(  # type: ignore
+    added_name = False
+
+    output = model.create_chat_completion(  # type: ignore
         messages=messages,
         max_tokens=config.max_tokens,
         temperature=config.temperature,
+        stream=True,
     )
 
-    choices = response.get("choices")
-    text = ""
+    for chunk in output:
+        delta = chunk["choices"][0]["delta"]
+        if "content" in delta:
+            if not added_name:
+                name = get_name(2)
+                screen.println(f"{name}: ")
+                added_name = True
 
-    if choices:
-        text = choices[0]["message"].get("content", "")
-        text = clean_response(text)
-
-    return text
+            content = delta["content"]
+            screen.println(content)
 
 
 def start_conversation() -> None:
@@ -62,8 +67,7 @@ def start_conversation() -> None:
             if commands.check_command(prompt):
                 continue
 
-            response = get_response(prompt)
-            respond(get_name(2), response)
+            stream_response(prompt)
 
             n += 1
         except KeyboardInterrupt:
@@ -106,14 +110,6 @@ def get_name(num: int) -> str:
         name = f"{avatar} {name}"
 
     return name
-
-
-def respond(name: str, message: str) -> None:
-    if not message:
-        return
-
-    add_spaces()
-    screen.print(f"{name}: {message}")
 
 
 def add_spaces() -> None:

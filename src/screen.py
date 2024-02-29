@@ -17,6 +17,9 @@ class Screen:
     def print(self, message: str) -> None:
         print(message)
 
+    def println(self, message: str) -> None:
+        print(message, end="")
+
     def clear(self) -> None:
         print(self.term.clear)
 
