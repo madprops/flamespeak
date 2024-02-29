@@ -4,8 +4,6 @@ import sys
 import time
 from pathlib import Path
 
-spaced = False
-
 
 def dash_to_under(s: str) -> str:
     return s.replace("-", "_")
@@ -15,14 +13,12 @@ def under_to_dash(s: str) -> str:
     return s.replace("_", "-")
 
 
-def msg(message: str) -> None:
+def stderr(message: str) -> None:
     print(message, file=sys.stderr)
 
 
 def respond(message: str) -> None:
-    global spaced
     print(message, file=sys.stdout)
-    spaced = False
 
 
 def get_duration(start: float, end: float) -> str:
@@ -37,9 +33,8 @@ def get_duration(start: float, end: float) -> str:
         hours = seconds // 3600
         return f"{hours} hour{'s' if hours > 1 else ''}"
 
+
 def get_input(prompt: str) -> str:
-    global spaced
-    spaced = False
     return input(prompt)
 
 
@@ -47,7 +42,7 @@ def exit(message: str) -> None:
     from config import config
     duration = get_duration(config.Internal.start_time, time.time())
 
-    space(2)
+    space()
     respond(f"Exit: {message}")
     respond(f"Duration: {duration}")
     space()
@@ -104,13 +99,5 @@ def parse_duration(time_string: str) -> str:
     return time_string
 
 
-def space(num: int = 1) -> None:
-    global spaced
-
-    if spaced:
-        return
-
-    for _ in range(num):
-        respond("")
-
-    spaced = True
+def space() -> None:
+    respond("")

@@ -74,6 +74,7 @@ def start_conversation() -> None:
             n += 1
         except KeyboardInterrupt:
             if not prompt:
+                utils.space()
                 utils.exit("Keyboard Interrupt")
             else:
                 utils.respond("\nInterrupted 😝\n")
