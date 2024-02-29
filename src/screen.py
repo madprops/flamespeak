@@ -28,7 +28,7 @@ class Screen:
 
     def duration(self) -> None:
         start = config.Internal.start_time
-        seconds = time.time() - start
+        seconds = int(time.time() - start)
         duration = utils.timestring(seconds)
         self.print(f"Duration: {duration}")
 

@@ -69,6 +69,9 @@ def stream_response(prompt: str):
             token_printed = True
             screen.println(token)
 
+    if token_printed:
+        screen.space()
+
 
 def start_conversation() -> None:
     n = 0
