@@ -3,7 +3,7 @@ from config import config
 import utils
 
 # Libraries
-from llama_cpp import Llama # type: ignore
+from llama_cpp import Llama  # type: ignore
 
 # Standard
 import re
@@ -21,7 +21,7 @@ def prepare_model() -> None:
 
 
 def get_response(prompt: str) -> str:
-    response = model( # type: ignore
+    response = model(  # type: ignore
         prompt=prompt,
         max_tokens=config.max_tokens,
         temperature=config.temperature,
@@ -86,6 +86,10 @@ def clean_response(text: str) -> str:
 
     if match:
         text = text.lstrip(match.group("noise"))
+
+    text = text.replace("<|im_end|>", "")
+    text = text.replace("<|im_start|>assistant", "")
+    text = re.sub("\n{2,}", "\n\n", text)
 
     if config.no_breaks:
         text = text.replace("\n", " ")
