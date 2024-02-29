@@ -23,8 +23,16 @@ def prepare_model() -> None:
 
 
 def get_response(prompt: str) -> str:
-    response = model(  # type: ignore
-        prompt=prompt,
+    messages = [
+        {"role": "system", "content": f"You are a guy called {config.name_2}"},
+        {
+            "role": "user",
+            "content": prompt,
+        }
+    ]
+
+    response = model.create_chat_completion(  # type: ignore
+        messages=messages,
         max_tokens=config.max_tokens,
         temperature=config.temperature,
     )
@@ -33,7 +41,7 @@ def get_response(prompt: str) -> str:
     text = ""
 
     if choices:
-        text = choices[0].get("text", "")
+        text = choices[0]["message"].get("content", "")
         text = clean_response(text)
 
     return text
@@ -72,9 +80,9 @@ def get_prompt() -> str:
 
 
 def clean_response(text: str) -> str:
-    text = re.sub(r"^[^\w]*", "", text)
-    text = text.replace("<|im_end|>", "")
-    text = text.replace("<|im_start|>assistant", "")
+    text = re.sub(r"^[^\w]*", "", text, re.IGNORECASE)
+    text = re.sub("<|im_end|>", "", text, flags=re.IGNORECASE)
+    text = re.sub("<|im_start|>assistant", "", text, flags=re.IGNORECASE)
     text = re.sub("\n{2,}", "\n\n", text)
 
     if config.no_breaks:
