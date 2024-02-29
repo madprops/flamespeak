@@ -44,7 +44,7 @@ class ArgParser:
     def get_list(self, attr: str, value: str, vtype: Any, separator: str) -> List[Any]:
         try:
             lst = list(map(vtype, map(str.strip, value.split(separator))))
-        except:
+        except BaseException:
             utils.exit(f"Failed to parse '--{attr}'")
             return []
 
@@ -100,7 +100,7 @@ class ArgParser:
                 num = int(num)
             elif vtype == float:
                 num = float(num)
-        except:
+        except BaseException:
             utils.exit(f"Failed to parse '{attr}'")
             return
 
