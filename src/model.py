@@ -38,18 +38,16 @@ def get_response(prompt: str) -> str:
 
 
 def check_command(prompt: str) -> bool:
-    cmd = prompt.lower()
+    words = prompt.split(" ")
 
-    if not cmd.startswith("/"):
-        return False
+    if len(words) == 1:
+        cmd = words[0]
 
-    cmd = cmd[1:]
+        if cmd in ["quit", "exit", "bye", "goodbye"]:
+            utils.exit("User Exit")
+            return True
 
-    if cmd in ["quit", "exit"]:
-        utils.exit("User Exit")
-
-    return True
-
+    return False
 
 def start_conversation() -> None:
     n = 0
@@ -86,12 +84,7 @@ def get_prompt() -> str:
 
 
 def clean_response(text: str) -> str:
-    pattern = re.compile(r"^(?P<noise>[ .,;\\n]*)(\w+)")
-    match = re.match(pattern, text)
-
-    if match:
-        text = text.lstrip(match.group("noise"))
-
+    text = re.sub(r"^[^\w]*", "", text)
     text = text.replace("<|im_end|>", "")
     text = text.replace("<|im_start|>assistant", "")
     text = re.sub("\n{2,}", "\n\n", text)
