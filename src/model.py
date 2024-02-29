@@ -1,5 +1,7 @@
 # Modules
 from config import config
+from screen import screen
+import commands
 import utils
 
 # Libraries
@@ -37,14 +39,6 @@ def get_response(prompt: str) -> str:
     return text
 
 
-def check_command(prompt: str) -> bool:
-    if prompt in ["quit", "exit", "bye", "goodbye", "good bye"]:
-        utils.exit("User Exit")
-        return True
-
-    return False
-
-
 def start_conversation() -> None:
     n = 0
 
@@ -57,7 +51,7 @@ def start_conversation() -> None:
 
             prompt = get_prompt()
 
-            if check_command(prompt):
+            if commands.check_command(prompt):
                 continue
 
             response = get_response(prompt)
@@ -66,10 +60,10 @@ def start_conversation() -> None:
             n += 1
         except KeyboardInterrupt:
             if not prompt:
-                utils.space()
-                utils.exit("Keyboard Interrupt")
+                screen.space()
+                screen.exit("Keyboard Interrupt")
             else:
-                utils.respond("\nInterrupted 😝\n")
+                screen.print("Interrupted 😝")
 
 
 def get_prompt() -> str:
@@ -111,11 +105,11 @@ def respond(name: str, message: str) -> None:
         return
 
     add_spaces()
-    utils.respond(f"{name}: {message}")
+    screen.print(f"{name}: {message}")
 
 
 def add_spaces() -> None:
     if config.compact:
         return
 
-    utils.space()
+    screen.space()

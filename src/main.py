@@ -1,5 +1,6 @@
 # Modules
 from config import config
+from screen import screen
 import model
 import utils
 
@@ -17,7 +18,7 @@ def get_time() -> float:
 def show_seconds(name: str, start: float, end: float) -> None:
     num = round(start - end, 3)
     label = utils.colortext("blue", name)
-    utils.respond(f"{label}: {num} seconds")
+    screen.print(f"{label}: {num} seconds")
 
 
 def check_time(name: str) -> None:
@@ -31,18 +32,20 @@ def check_time(name: str) -> None:
 
 
 def main() -> None:
-    global last_time
-    last_time = config.Internal.start_time
+    with screen.term.fullscreen():
+        global last_time
+        last_time = config.Internal.start_time
 
-    config.parse_args()
-    check_time("Parse Arguments")
+        config.parse_args()
 
-    model.prepare_model()
-    check_time("Prepare Model")
-    utils.respond(utils.colortext("green", "Starting Conversation"))
-    utils.space()
+        model.prepare_model()
+        check_time("Prepare Model")
 
-    model.start_conversation()
+        screen.print(utils.colortext("green", "Starting Conversation"))
+        screen.space()
+
+        model.start_conversation()
+        screen.exit()
 
 
 if __name__ == "__main__":

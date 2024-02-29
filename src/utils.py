@@ -34,20 +34,14 @@ def get_duration(start: float, end: float) -> str:
         return f"{hours} hour{'s' if hours > 1 else ''}"
 
 
-def get_input(prompt: str) -> str:
-    return input(prompt)
-
-
-def exit(message: str) -> None:
+def print_duration() -> None:
     from config import config
     duration = get_duration(config.Internal.start_time, time.time())
-
-    space()
-    respond(f"Exit: {message}")
     respond(f"Duration: {duration}")
-    space()
 
-    sys.exit(1)
+
+def get_input(prompt: str) -> str:
+    return input(prompt)
 
 
 def colortext(color: str, text: str) -> str:
@@ -99,5 +93,6 @@ def parse_duration(time_string: str) -> str:
     return time_string
 
 
-def space() -> None:
-    respond("")
+def exit(message: str) -> None:
+    respond(f"\nExit: {message}")
+    sys.exit(1)

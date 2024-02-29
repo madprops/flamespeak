@@ -1,1 +1,2 @@
 llama_cpp_python ~= 0.2.53
+blessed ~= 1.20.0
