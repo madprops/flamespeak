@@ -1,4 +1,5 @@
 # Modules
+from config import config
 import utils
 
 # Libraries
@@ -6,6 +7,7 @@ from blessed import Terminal
 
 # Standard
 import sys
+import time
 
 
 class Screen:
@@ -20,6 +22,19 @@ class Screen:
 
     def space(self) -> None:
         self.print("")
+
+    def duration(self) -> None:
+        start = config.Internal.start_time
+        seconds = time.time() - start
+        duration = utils.timestring(seconds)
+        self.print(f"Duration: {duration}")
+
+    def exit(self, message: str) -> None:
+        self.print(f"\nExit: {message}")
+        sys.exit(1)
+
+    def input(self, prompt: str) -> str:
+        return input(prompt)
 
 
 screen = Screen()

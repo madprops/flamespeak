@@ -68,7 +68,7 @@ def start_conversation() -> None:
 
 def get_prompt() -> str:
     name = get_name(1)
-    return utils.get_input(f"{name}: ")
+    return screen.input(f"{name}: ")
 
 
 def clean_response(text: str) -> str:
