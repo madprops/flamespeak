@@ -33,7 +33,7 @@ def stream_response(prompt: str):
 
     added_name = False
     token_printed = False
-    last_token = ""
+    last_token = " "
 
     output = model.create_chat_completion(  # type: ignore
         messages=messages,
@@ -41,7 +41,6 @@ def stream_response(prompt: str):
         temperature=config.temperature,
         stream=True,
     )
-
 
     for chunk in output:
         delta = chunk["choices"][0]["delta"]
@@ -54,9 +53,6 @@ def stream_response(prompt: str):
                 added_name = True
 
             token = delta["content"]
-            token = re.sub(r"\<\|im_start\|\>assistant", f"{get_name(2)}: ", token, re.IGNORECASE)
-            token = re.sub(r"\<\|im_end\|\>", "\n", token, re.IGNORECASE)
-            token = re.sub(r"\<\|im_end\|\>", "\n", token, re.IGNORECASE)
 
             if token == "\n":
                 if not token_printed:
