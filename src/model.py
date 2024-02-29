@@ -3,7 +3,7 @@ from config import config
 import utils
 
 # Libraries
-from llama_cpp import Llama
+from llama_cpp import Llama # type: ignore
 
 # Standard
 import re
@@ -21,7 +21,7 @@ def prepare_model() -> None:
 
 
 def get_response(prompt: str) -> str:
-    response = model(
+    response = model( # type: ignore
         prompt=prompt,
         max_tokens=config.max_tokens,
         temperature=config.temperature,
@@ -94,7 +94,7 @@ def clean_response(text: str) -> str:
 
 
 def get_name(num: int) -> str:
-    name = getattr(config, f"name_{num}")
+    name = str(getattr(config, f"name_{num}"))
 
     if not config.nocolors:
         color = getattr(config, f"color_{num}")
@@ -114,7 +114,7 @@ def respond(name: str, message: str) -> None:
     utils.respond(f"{name}: {message}")
 
 
-def add_spaces():
+def add_spaces() -> None:
     if config.spacing <= 0:
         return
 

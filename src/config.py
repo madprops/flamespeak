@@ -1,6 +1,6 @@
 # Modules
 from argparser import ArgParser
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 # Standard
 import time
@@ -21,8 +21,8 @@ class Config:
         self.verbose = False
         self.nocolors = False
         self.spacing = 1
-        self.nobreaks = False
-        self.nointro = False
+        self.no_breaks = False
+        self.no_intro = False
         self.max_tokens = 100
         self.temperature = 0.8
 
@@ -48,7 +48,7 @@ class Config:
             "temperature": {"type": float, "help": "The temperature to use in the model"},
         }
 
-        aliases = {}
+        aliases: Dict[str, List[str]] = {}
 
     def parse_args(self) -> None:
         ap = ArgParser("Flamespeak", self.Internal.arguments,

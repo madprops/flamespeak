@@ -30,7 +30,7 @@ def check_time(name: str) -> None:
     last_time = now
 
 
-def main():
+def main() -> None:
     global last_time
     last_time = config.Internal.start_time
 
