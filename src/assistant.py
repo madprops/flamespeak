@@ -32,17 +32,35 @@ def get_response(prompt: str) -> str:
     return text
 
 
+def check_command(prompt: str) -> bool:
+    cmd = prompt.lower()
+
+    if not cmd.startswith("/"):
+        return False
+
+    cmd = cmd[1:]
+
+    if cmd in ["quit", "exit"]:
+        utils.exit("User Exit")
+
+    return True
+
+
 def start_conversation() -> None:
     while True:
         try:
             prompt = get_prompt()
+
+            if check_command(prompt):
+                continue
+
             response = get_response(prompt)
 
             if response:
                 name = get_name(2)
                 utils.respond(f"{name}: {response}")
         except KeyboardInterrupt:
-            utils.exit("Keyboard interrupt")
+            utils.exit("Keyboard Interrupt")
 
 
 def get_prompt() -> str:
