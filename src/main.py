@@ -32,7 +32,7 @@ def check_time(name: str) -> None:
 
 
 def main() -> None:
-    with screen.term.fullscreen():
+    # with screen.term.fullscreen():
         global last_time
         last_time = config.Internal.start_time
 

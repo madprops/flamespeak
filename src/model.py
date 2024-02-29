@@ -32,6 +32,8 @@ def stream_response(prompt: str):
     ]
 
     added_name = False
+    token_printed = False
+    last_token = ""
 
     output = model.create_chat_completion(  # type: ignore
         messages=messages,
@@ -40,16 +42,32 @@ def stream_response(prompt: str):
         stream=True,
     )
 
+
     for chunk in output:
         delta = chunk["choices"][0]["delta"]
+
         if "content" in delta:
             if not added_name:
+                add_spaces()
                 name = get_name(2)
                 screen.println(f"{name}: ")
                 added_name = True
 
-            content = delta["content"]
-            screen.println(content)
+            token = delta["content"]
+            token = re.sub(r"\<\|im_start\|\>assistant", f"{get_name(2)}: ", token, re.IGNORECASE)
+            token = re.sub(r"\<\|im_end\|\>", "\n", token, re.IGNORECASE)
+            token = re.sub(r"\<\|im_end\|\>", "\n", token, re.IGNORECASE)
+
+            if token == "\n":
+                if not token_printed:
+                    continue
+            elif token == " ":
+                if last_token == " ":
+                    continue
+
+            last_token = token
+            token_printed = True
+            screen.println(token)
 
 
 def start_conversation() -> None:
@@ -81,18 +99,6 @@ def start_conversation() -> None:
 def get_prompt() -> str:
     name = get_name(1)
     return screen.input(f"{name}: ")
-
-
-def clean_response(text: str) -> str:
-    text = re.sub(r"^[^\w]*", "", text, re.IGNORECASE)
-    text = re.sub("<|im_end|>", "", text, flags=re.IGNORECASE)
-    text = re.sub("<|im_start|>assistant", "", text, flags=re.IGNORECASE)
-    text = re.sub("\n{2,}", "\n\n", text)
-
-    if config.no_breaks:
-        text = text.replace("\n", " ")
-
-    return text.strip()
 
 
 def get_name(num: int) -> str:
