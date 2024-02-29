@@ -19,6 +19,7 @@ class Config:
         self.nocolors = False
         self.spacing = 1
         self.nobreaks = False
+        self.nointro = False
 
     class Internal:
         # Argument definitions
@@ -33,7 +34,8 @@ class Config:
             "nocolors": {"action": "store_true", "help": "Don't use colors"},
             "verbose": {"action": "store_true", "help": "Verbose output"},
             "spacing": {"type": int, "help": "Number of spaces between messages"},
-            "nobreaks": {"action": "store_true", "help": "Remove all linebreaks"},
+            "no-breaks": {"action": "store_true", "help": "Remove all linebreaks"},
+            "no-intro": {"action": "store_true", "help": "Don't show the intro messages"},
         }
 
         aliases = {}
@@ -45,7 +47,7 @@ class Config:
         normals = [
             "model", "name_1", "name_2", "color_1", "color_2",
             "avatar_1", "avatar_2", "nocolors", "verbose", "spacing",
-            "nobreaks",
+            "no_breaks", "no_intro",
         ]
 
         for normal in normals:

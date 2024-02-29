@@ -82,7 +82,7 @@ def clean_response(text: str) -> str:
     if match:
         text = text.lstrip(match.group("noise"))
 
-    if config.nobreaks:
+    if config.no_breaks:
         text = text.replace("\n", " ")
 
     return text.strip()
