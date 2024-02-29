@@ -43,7 +43,7 @@ def check_command(prompt: str) -> bool:
     if len(words) == 1:
         cmd = words[0]
 
-        if cmd in ["quit", "exit", "bye", "goodbye"]:
+        if cmd in ["quit", "exit", "bye", "goodbye", "good bye"]:
             utils.exit("User Exit")
             return True
 
@@ -66,10 +66,7 @@ def start_conversation() -> None:
                 continue
 
             response = get_response(prompt)
-
-            if response:
-                add_spaces()
-                respond(get_name(2), response)
+            respond(get_name(2), response)
 
             n += 1
         except KeyboardInterrupt:
@@ -115,6 +112,10 @@ def get_name(num: int) -> str:
 
 
 def respond(name: str, message: str) -> None:
+    if not message:
+        return
+
+    add_spaces()
     utils.respond(f"{name}: {message}")
 
 
