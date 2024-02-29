@@ -17,7 +17,7 @@ def get_time() -> float:
 def show_seconds(name: str, start: float, end: float) -> None:
     num = round(start - end, 3)
     label = utils.colortext("blue", name)
-    utils.msg(f"{label}: {num} seconds")
+    utils.respond(f"{label}: {num} seconds")
 
 
 def check_time(name: str) -> None:
@@ -39,7 +39,8 @@ def main() -> None:
 
     model.prepare_model()
     check_time("Prepare Model")
-    utils.msg(utils.colortext("green", "Starting Conversation\n"))
+    utils.respond(utils.colortext("green", "Starting Conversation"))
+    utils.space()
 
     model.start_conversation()
 

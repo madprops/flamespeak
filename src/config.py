@@ -20,7 +20,7 @@ class Config:
         self.color_2 = "green"
         self.verbose = False
         self.nocolors = False
-        self.spacing = 1
+        self.compact = False
         self.no_breaks = False
         self.no_intro = False
         self.max_tokens = 100
@@ -41,7 +41,7 @@ class Config:
             "avatar-2": {"type": str, "help": "The assistant's avatar"},
             "nocolors": {"action": "store_true", "help": "Don't use colors"},
             "verbose": {"action": "store_true", "help": "Verbose output"},
-            "spacing": {"type": int, "help": "Number of spaces between messages"},
+            "compact": {"action": "store_true", "help": "Don't add spaces between messages"},
             "no-breaks": {"action": "store_true", "help": "Remove all linebreaks"},
             "no-intro": {"action": "store_true", "help": "Don't show the intro messages"},
             "max-tokens": {"type": int, "help": "Max tokens to use in a single request"},
@@ -56,7 +56,7 @@ class Config:
 
         normals = [
             "model", "name_1", "name_2", "color_1", "color_2",
-            "avatar_1", "avatar_2", "nocolors", "verbose", "spacing",
+            "avatar_1", "avatar_2", "nocolors", "verbose", "compact",
             "no_breaks", "no_intro", "max_tokens", "temperature",
         ]
 

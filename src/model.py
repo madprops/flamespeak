@@ -49,6 +49,7 @@ def check_command(prompt: str) -> bool:
 
     return False
 
+
 def start_conversation() -> None:
     n = 0
 
@@ -75,12 +76,12 @@ def start_conversation() -> None:
             if not prompt:
                 utils.exit("Keyboard Interrupt")
             else:
-                print("\nInterrupted 😝\n")
+                utils.respond("\nInterrupted 😝\n")
 
 
 def get_prompt() -> str:
     name = get_name(1)
-    return input(f"{name}: ")
+    return utils.get_input(f"{name}: ")
 
 
 def clean_response(text: str) -> str:
@@ -117,8 +118,7 @@ def respond(name: str, message: str) -> None:
 
 
 def add_spaces() -> None:
-    if config.spacing <= 0:
+    if config.compact:
         return
 
-    for _ in range(config.spacing):
-        utils.respond("")
+    utils.space()
