@@ -8,20 +8,20 @@ from llama_cpp import Llama
 # Standard
 import re
 
-assistant = None
+model = None
 
 
-def prepare_assistant() -> None:
-    global assistant
+def prepare_model() -> None:
+    global model
 
-    assistant = Llama(
+    model = Llama(
         model_path=config.model,
         verbose=config.verbose,
     )
 
 
 def get_response(prompt: str) -> str:
-    response = assistant(prompt)
+    response = model(prompt)
     choices = response.get("choices")
     text = ""
 

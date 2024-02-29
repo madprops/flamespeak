@@ -1,6 +1,6 @@
 # Modules
 from config import config
-import assistant
+import model
 import utils
 
 # Standard
@@ -32,17 +32,16 @@ def check_time(name: str) -> None:
 
 def main():
     global last_time
-    start_time = get_time()
-    last_time = start_time
+    last_time = config.Internal.start_time
 
     config.parse_args()
-    check_time("Parse Args")
+    check_time("Parse Arguments")
 
-    assistant.prepare_assistant()
-    check_time("Prepare Assistant")
+    model.prepare_model()
+    check_time("Prepare Model")
     utils.msg(utils.colortext("green", "Starting Conversation\n"))
 
-    assistant.start_conversation()
+    model.start_conversation()
 
 
 if __name__ == "__main__":

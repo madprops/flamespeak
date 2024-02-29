@@ -2,6 +2,9 @@
 from argparser import ArgParser
 from typing import Dict, Any
 
+# Standard
+import time
+
 
 class Config:
     # Class to hold all the configuration of the program
@@ -22,6 +25,9 @@ class Config:
         self.nointro = False
 
     class Internal:
+        # Time when program started
+        start_time = time.time()
+
         # Argument definitions
         arguments: Dict[str, Any] = {
             "model": {"type": str, "help": "The model to use", "required": True},
