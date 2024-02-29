@@ -38,14 +38,9 @@ def get_response(prompt: str) -> str:
 
 
 def check_command(prompt: str) -> bool:
-    words = prompt.split(" ")
-
-    if len(words) == 1:
-        cmd = words[0]
-
-        if cmd in ["quit", "exit", "bye", "goodbye", "good bye"]:
-            utils.exit("User Exit")
-            return True
+    if prompt in ["quit", "exit", "bye", "goodbye", "good bye"]:
+        utils.exit("User Exit")
+        return True
 
     return False
 
