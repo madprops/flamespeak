@@ -25,6 +25,7 @@ class Config:
         self.max_tokens = 128
         self.temperature = 0.8
         self.system = ""
+        self.log = ""
 
     class Internal:
         # Time when program started
@@ -46,6 +47,7 @@ class Config:
             "max-tokens": {"type": int, "help": "Max tokens to use in a single request"},
             "temperature": {"type": float, "help": "The temperature to use in the model"},
             "system": {"type": str, "help": "This tells the model how to act"},
+            "log": {"action": "store_true", "help": "Log conversation to this file"},
         }
 
         aliases: Dict[str, List[str]] = {}

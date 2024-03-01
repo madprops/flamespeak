@@ -7,81 +7,88 @@ from llama_cpp import Llama  # type: ignore
 
 # Standard
 import asyncio
-
-model = None
-
-
-def prepare_model() -> None:
-    global model
-
-    model = Llama(
-        model_path=config.model,
-        verbose=config.verbose,
-    )
+import time
 
 
-async def stream_response(prompt: str) -> None:
-    prompt = prompt.strip()
+class Model:
+    def __init__(self) -> None:
+        self.mode = None
+        self.stream_date = 0
 
-    if not prompt:
-        return
+    def prepare(self) -> None:
+        self.model = Llama(
+            model_path=config.model,
+            verbose=config.verbose,
+        )
 
-    add_space()
-    screen.print_prompt(1, prompt)
+    async def stream(self, prompt: str) -> None:
+        prompt = prompt.strip()
 
-    messages = [
-        {"role": "system", "content": config.system},
-        {
-            "role": "user",
-            "content": prompt,
-        },
-    ]
+        if not prompt:
+            return
 
-    added_name = False
-    token_printed = False
-    last_token = " "
+        self.space()
+        screen.print_prompt(1, prompt)
 
-    output = model.create_chat_completion(  # type: ignore
-        messages=messages,
-        max_tokens=config.max_tokens,
-        temperature=config.temperature,
-        stream=True,
-    )
+        messages = [
+            {"role": "system", "content": config.system},
+            {
+                "role": "user",
+                "content": prompt,
+            },
+        ]
 
-    for chunk in output:
-        delta = chunk["choices"][0]["delta"]
+        added_name = False
+        token_printed = False
+        last_token = " "
+        date = time.time()
+        self.stream_date = date
 
-        if "content" in delta:
-            if not added_name:
-                add_space()
-                screen.print_prompt(2)
-                added_name = True
+        output = self.model.create_chat_completion(  # type: ignore
+            messages=messages,
+            max_tokens=config.max_tokens,
+            temperature=config.temperature,
+            stream=True,
+        )
 
-            token = delta["content"]
+        for chunk in output:
+            if date != self.stream_date:
+                break
 
-            if token == "\n":
+            delta = chunk["choices"][0]["delta"]
+
+            if "content" in delta:
+                if not added_name:
+                    self.space()
+                    screen.print_prompt(2)
+                    added_name = True
+
+                token = delta["content"]
+
+                if token == "\n":
+                    if not token_printed:
+                        continue
+                elif token == " ":
+                    if last_token == " ":
+                        continue
+
+                last_token = token
+
                 if not token_printed:
-                    continue
-            elif token == " ":
-                if last_token == " ":
-                    continue
+                    token = token.lstrip()
+                    token_printed = True
 
-            last_token = token
+                screen.insert(token)
 
-            if not token_printed:
-                token = token.lstrip()
-                token_printed = True
+            await asyncio.sleep(0.1)
 
-            screen.insert(token)
+        if token_printed:
+            screen.space()
 
-        await asyncio.sleep(0.1)
+    def space(self) -> None:
+        if config.compact:
+            return
 
-    if token_printed:
         screen.space()
 
-
-def add_space() -> None:
-    if config.compact:
-        return
-
-    screen.space()
+model = Model()

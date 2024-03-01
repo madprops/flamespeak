@@ -1,8 +1,8 @@
 # Modules
 from config import config
 from screen import screen
+from model import model
 import utils
-import model
 
 # Standard
 import time
@@ -36,7 +36,7 @@ async def main() -> None:
     global last_time
     last_time = config.Internal.start_time
     config.parse_args()
-    model.prepare_model()
+    model.prepare()
     screen.prepare()
     await screen.run()
 

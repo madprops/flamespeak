@@ -111,8 +111,8 @@ class Screen:
             self.insert(text)
 
     async def ask_model(self, prompt: str) -> None:
-        from model import stream_response
-        await stream_response(prompt)
+        from model import model
+        await model.stream(prompt)
 
     async def on_enter(self) -> None:
         from commands import check_command
