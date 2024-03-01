@@ -40,9 +40,12 @@ def main() -> None:
         with screen.term.fullscreen():
             start()
 
+
 def start() -> None:
     global last_time
     last_time = config.Internal.start_time
+
+    screen.bottom()
 
     model.prepare_model()
     check_time("Prepare Model")
