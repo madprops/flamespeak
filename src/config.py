@@ -47,7 +47,7 @@ class Config:
             "max-tokens": {"type": int, "help": "Max tokens to use in a single request"},
             "temperature": {"type": float, "help": "The temperature to use in the model"},
             "system": {"type": str, "help": "This tells the model how to act"},
-            "log": {"action": "store_true", "help": "Log conversation to this file"},
+            "log": {"type": str, "help": "Log conversation to this file"},
         }
 
         aliases: Dict[str, List[str]] = {}
@@ -57,13 +57,18 @@ class Config:
                        self.Internal.aliases, self)
 
         normals = [
-            "model", "name_1", "name_2", "color_1", "color_2",
+            "name_1", "name_2", "color_1", "color_2",
             "avatar_1", "avatar_2", "verbose", "compact", "no_breaks",
             "no_intro", "max_tokens", "temperature", "system",
         ]
 
         for normal in normals:
             ap.normal(normal)
+
+        paths = ["model", "log"]
+
+        for path in paths:
+            ap.path(path)
 
         self.check_config()
 

@@ -17,7 +17,7 @@ class Model:
 
     def prepare(self) -> None:
         self.model = Llama(
-            model_path=config.model,
+            model_path=str(config.model),
             verbose=config.verbose,
         )
 
