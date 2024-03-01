@@ -1,11 +1,12 @@
 # Modules
 from config import config
 from screen import screen
-import model
 import utils
+import model
 
 # Standard
 import time
+import asyncio
 
 # Performance
 last_time = 0.0
@@ -31,23 +32,13 @@ def check_time(name: str) -> None:
     last_time = now
 
 
-def main() -> None:
+async def main() -> None:
     global last_time
     last_time = config.Internal.start_time
-
     config.parse_args()
-    screen.bottom()
-
     model.prepare_model()
-    check_time("Model Started")
-
-    screen.print(utils.colortext("green", "Starting Conversation"))
-    screen.space()
-
-    model.start_conversation()
-    screen.exit()
-
+    screen.prepare()
+    await screen.run()
 
 if __name__ == "__main__":
-    with screen.term.fullscreen():
-        main()
+    asyncio.get_event_loop().run_until_complete(main())

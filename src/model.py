@@ -1,14 +1,12 @@
 # Modules
 from config import config
 from screen import screen
-import commands
-import textprompt
 
 # Libraries
 from llama_cpp import Llama  # type: ignore
 
 # Standard
-import re
+import asyncio
 
 model = None
 
@@ -22,7 +20,15 @@ def prepare_model() -> None:
     )
 
 
-def stream_response(prompt: str):
+async def stream_response(prompt: str) -> None:
+    prompt = prompt.strip()
+
+    if not prompt:
+        return
+
+    add_space()
+    screen.print_prompt(1, prompt)
+
     messages = [
         {"role": "system", "content": config.system},
         {
@@ -47,8 +53,8 @@ def stream_response(prompt: str):
 
         if "content" in delta:
             if not added_name:
-                add_spaces()
-                textprompt.print_prompt(2)
+                add_space()
+                screen.print_prompt(2)
                 added_name = True
 
             token = delta["content"]
@@ -66,43 +72,15 @@ def stream_response(prompt: str):
                 token = token.lstrip()
                 token_printed = True
 
-            screen.println(token)
+            screen.insert(token)
+
+        await asyncio.sleep(0.1)
 
     if token_printed:
         screen.space()
 
 
-def start_conversation() -> None:
-    n = 0
-
-    while True:
-        try:
-            prompt = ""
-
-            if n > 0:
-                add_spaces()
-
-            prompt = get_prompt()
-
-            if commands.check_command(prompt):
-                continue
-
-            stream_response(prompt)
-
-            n += 1
-        except KeyboardInterrupt:
-            if not prompt:
-                screen.space()
-                screen.exit("Keyboard Interrupt")
-            else:
-                screen.print("Interrupted 😝")
-
-
-def get_prompt() -> str:
-    return textprompt.get_input()
-
-
-def add_spaces() -> None:
+def add_space() -> None:
     if config.compact:
         return
 
