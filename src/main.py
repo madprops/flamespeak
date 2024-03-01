@@ -32,14 +32,6 @@ def check_time(name: str) -> None:
 
 
 def main() -> None:
-    if config.no_screen:
-        start()
-    else:
-        with screen.term.fullscreen():
-            start()
-
-
-def start() -> None:
     global last_time
     last_time = config.Internal.start_time
 
@@ -47,7 +39,7 @@ def start() -> None:
     screen.bottom()
 
     model.prepare_model()
-    check_time("Prepare Model")
+    check_time("Model Started")
 
     screen.print(utils.colortext("green", "Starting Conversation"))
     screen.space()
@@ -57,4 +49,5 @@ def start() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    with screen.term.fullscreen():
+        main()

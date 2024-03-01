@@ -25,7 +25,6 @@ class Config:
         self.no_intro = False
         self.max_tokens = 100
         self.temperature = 0.8
-        self.no_screen = False
         self.system = ""
 
     class Internal:
@@ -48,7 +47,6 @@ class Config:
             "no-intro": {"action": "store_true", "help": "Don't show the intro messages"},
             "max-tokens": {"type": int, "help": "Max tokens to use in a single request"},
             "temperature": {"type": float, "help": "The temperature to use in the model"},
-            "no-screen": {"action": "store_true", "help": "Don't enter fullscreen mode"},
             "system": {"type": str, "help": "This tells the model how to act"},
         }
 
@@ -62,7 +60,7 @@ class Config:
             "model", "name_1", "name_2", "color_1", "color_2",
             "avatar_1", "avatar_2", "no_colors", "verbose", "compact",
             "no_breaks", "no_intro", "max_tokens", "temperature",
-            "no_screen", "system"
+            "system"
         ]
 
         for normal in normals:
