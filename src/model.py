@@ -62,7 +62,11 @@ def stream_response(prompt: str):
                     continue
 
             last_token = token
-            token_printed = True
+
+            if not token_printed:
+                token = token.lstrip()
+                token_printed = True
+
             screen.println(token)
 
     if token_printed:

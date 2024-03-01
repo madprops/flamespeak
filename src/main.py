@@ -32,20 +32,26 @@ def check_time(name: str) -> None:
 
 
 def main() -> None:
-    # with screen.term.fullscreen():
-        global last_time
-        last_time = config.Internal.start_time
+    config.parse_args()
 
-        config.parse_args()
+    if config.no_screen:
+        start()
+    else:
+        with screen.term.fullscreen():
+            start()
 
-        model.prepare_model()
-        check_time("Prepare Model")
+def start() -> None:
+    global last_time
+    last_time = config.Internal.start_time
 
-        screen.print(utils.colortext("green", "Starting Conversation"))
-        screen.space()
+    model.prepare_model()
+    check_time("Prepare Model")
 
-        model.start_conversation()
-        screen.exit()
+    screen.print(utils.colortext("green", "Starting Conversation"))
+    screen.space()
+
+    model.start_conversation()
+    screen.exit()
 
 
 if __name__ == "__main__":
