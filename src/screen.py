@@ -19,6 +19,7 @@ class Screen:
 
     def println(self, message: str) -> None:
         print(message, end="")
+        sys.stdout.flush()
 
     def clear(self) -> None:
         print(self.term.clear)
