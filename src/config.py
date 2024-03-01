@@ -26,6 +26,7 @@ class Config:
         self.max_tokens = 100
         self.temperature = 0.8
         self.no_screen = False
+        self.system = ""
 
     class Internal:
         # Time when program started
@@ -48,6 +49,7 @@ class Config:
             "max-tokens": {"type": int, "help": "Max tokens to use in a single request"},
             "temperature": {"type": float, "help": "The temperature to use in the model"},
             "no-screen": {"action": "store_true", "help": "Don't enter fullscreen mode"},
+            "system": {"type": str, "help": "This tells the model how to act"},
         }
 
         aliases: Dict[str, List[str]] = {}
@@ -60,11 +62,17 @@ class Config:
             "model", "name_1", "name_2", "color_1", "color_2",
             "avatar_1", "avatar_2", "nocolors", "verbose", "compact",
             "no_breaks", "no_intro", "max_tokens", "temperature",
-            "no_screen",
+            "no_screen", "system"
         ]
 
         for normal in normals:
             ap.normal(normal)
+
+        self.check_config()
+
+    def check_config(self) -> None:
+        if (not self.system) and (self.name_2):
+            self.system = f"You are a guy called {self.name_2}"
 
 
 config = Config()

@@ -32,8 +32,6 @@ def check_time(name: str) -> None:
 
 
 def main() -> None:
-    config.parse_args()
-
     if config.no_screen:
         start()
     else:
@@ -45,6 +43,7 @@ def start() -> None:
     global last_time
     last_time = config.Internal.start_time
 
+    config.parse_args()
     screen.bottom()
 
     model.prepare_model()

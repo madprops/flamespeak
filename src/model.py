@@ -24,7 +24,7 @@ def prepare_model() -> None:
 
 def stream_response(prompt: str):
     messages = [
-        {"role": "system", "content": f"You are a guy called {config.name_2}"},
+        {"role": "system", "content": config.system},
         {
             "role": "user",
             "content": prompt,
