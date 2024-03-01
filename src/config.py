@@ -19,11 +19,10 @@ class Config:
         self.color_1 = "blue"
         self.color_2 = "green"
         self.verbose = False
-        self.no_colors = False
         self.compact = False
         self.no_breaks = False
         self.no_intro = False
-        self.max_tokens = 100
+        self.max_tokens = 128
         self.temperature = 0.8
         self.system = ""
 
@@ -40,7 +39,6 @@ class Config:
             "color-2": {"type": str, "help": "The assistant's name"},
             "avatar-1": {"type": str, "help": "The user's avatar"},
             "avatar-2": {"type": str, "help": "The assistant's avatar"},
-            "no-colors": {"action": "store_true", "help": "Don't use colors"},
             "verbose": {"action": "store_true", "help": "Verbose output"},
             "compact": {"action": "store_true", "help": "Don't add spaces between messages"},
             "no-breaks": {"action": "store_true", "help": "Remove all linebreaks"},
@@ -58,9 +56,8 @@ class Config:
 
         normals = [
             "model", "name_1", "name_2", "color_1", "color_2",
-            "avatar_1", "avatar_2", "no_colors", "verbose", "compact",
-            "no_breaks", "no_intro", "max_tokens", "temperature",
-            "system"
+            "avatar_1", "avatar_2", "verbose", "compact", "no_breaks",
+            "no_intro", "max_tokens", "temperature", "system",
         ]
 
         for normal in normals:

@@ -3,20 +3,19 @@ from config import config
 import utils
 
 # Libraries
-from prompt_toolkit import Application
+from prompt_toolkit import Application  # type: ignore
+from prompt_toolkit.buffer import Buffer  # type: ignore
+from prompt_toolkit.layout.containers import VSplit, HSplit, Window  # type: ignore
+from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl  # type: ignore
+from prompt_toolkit.formatted_text import FormattedText  # type: ignore
+from prompt_toolkit.layout.layout import Layout  # type: ignore
+from prompt_toolkit.key_binding import KeyBindings  # type: ignore
+from prompt_toolkit.layout import WindowAlign, Dimension  # type: ignore
+from prompt_toolkit.key_binding.key_processor import KeyPressEvent  # type: ignore
 from prompt_toolkit.buffer import Buffer
-from prompt_toolkit.layout.containers import VSplit, HSplit, Window
-from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
-from prompt_toolkit.formatted_text import FormattedText
-from prompt_toolkit.layout.layout import Layout
-from prompt_toolkit.key_binding import KeyBindings
-from prompt_toolkit.layout import WindowAlign, Dimension
-from prompt_toolkit.formatted_text import FormattedText
-from prompt_toolkit.application import get_app
-import pyperclip
+import pyperclip  # type: ignore
 
 # Standard
-import sys
 import time
 
 
@@ -25,12 +24,12 @@ class Screen:
         self.last_prompt = ""
         self.kb = KeyBindings()
 
-        @self.kb.add("c-q")
-        def _(event):
+        @self.kb.add("c-q")  # type: ignore
+        def _(event: KeyPressEvent) -> None:
             event.app.exit()
 
-        @self.kb.add("c-v")
-        def _(event):
+        @self.kb.add("c-v")  # type: ignore
+        def _(event: KeyPressEvent) -> None:
             text = pyperclip.paste()
 
             if text:
@@ -39,26 +38,27 @@ class Screen:
             if text:
                 event.app.current_buffer.insert_text(text)
 
-        @self.kb.add("enter")
-        async def _(event):
-            prompt = event.app.current_buffer.text
-            self.last_prompt = prompt
-            self.clear_input()
-            await self.ask_model(prompt)
+        @self.kb.add("enter")  # type: ignore
+        async def _(event: KeyPressEvent) -> None:
+            await self.on_enter()
 
-        @self.kb.add("up")
-        def _(event):
-            self.set_input(self.last_prompt)
+        @self.kb.add("up")  # type: ignore
+        def _(event: KeyPressEvent) -> None:
+            self.set(self.input_buffer, self.last_prompt)
 
     def print(self, text: str) -> None:
         self.content_buffer.insert_text(f"{text}\n")
 
     def insert(self, text: str) -> None:
+        self.cursor_to_end(self.content_buffer)
         self.content_buffer.insert_text(text)
 
-    def set_input(self, text) -> None:
-        self.input_buffer.text = text
-        self.input_buffer.cursor_position = len(self.input_buffer.text)
+    def set(self, buffer: Buffer, text: str) -> None:
+        buffer.text = text
+        self.cursor_to_end(buffer)
+
+    def cursor_to_end(self, buffer: Buffer) -> None:
+        buffer.cursor_position = len(buffer.text)
 
     def clear_content(self) -> None:
         self.content_buffer.reset()
@@ -75,12 +75,8 @@ class Screen:
         duration = utils.timestring(seconds)
         self.print(f"Duration: {duration}")
 
-    def exit(self, message: str) -> None:
-        self.print(f"\nExit: {message}")
-        sys.exit(1)
-
-    def bottom(self) -> None:
-        print(self.term.move(self.term.height, 0))
+    def exit(self) -> None:
+        self.app.exit()
 
     def prepare(self) -> None:
         content_buffer = Buffer()
@@ -117,6 +113,17 @@ class Screen:
     async def ask_model(self, prompt: str) -> None:
         from model import stream_response
         await stream_response(prompt)
+
+    async def on_enter(self) -> None:
+        from commands import check_command
+        prompt = self.input_buffer.text
+        self.last_prompt = prompt
+        self.clear_input()
+
+        if check_command(prompt):
+            return
+
+        await self.ask_model(prompt)
 
 
 screen = Screen()

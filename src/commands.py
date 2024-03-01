@@ -21,14 +21,13 @@ clear_commands = [
 # Return True to exit the program
 def check_command(prompt: str) -> bool:
     if prompt in exit_commands:
-        screen.exit("User Exit")
+        screen.exit()
         return True
     elif prompt in time_commands:
-        screen.space()
         screen.duration()
         return True
     elif prompt in clear_commands:
-        screen.clear()
+        screen.clear_content()
         return True
 
     return False
