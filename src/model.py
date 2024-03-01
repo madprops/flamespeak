@@ -2,7 +2,7 @@
 from config import config
 from screen import screen
 import commands
-import utils
+import textprompt
 
 # Libraries
 from llama_cpp import Llama  # type: ignore
@@ -48,8 +48,7 @@ def stream_response(prompt: str):
         if "content" in delta:
             if not added_name:
                 add_spaces()
-                name = get_name(2)
-                screen.println(f"{name}: ")
+                textprompt.print_prompt(2)
                 added_name = True
 
             token = delta["content"]
@@ -100,25 +99,7 @@ def start_conversation() -> None:
 
 
 def get_prompt() -> str:
-    name = get_name(1)
-    return screen.input(f"{name}: ")
-
-
-def get_name(num: int) -> str:
-    name = str(getattr(config, f"name_{num}"))
-
-    if not config.nocolors:
-        color = getattr(config, f"color_{num}")
-
-        if color:
-            name = utils.colortext(color, name)
-
-    avatar = getattr(config, f"avatar_{num}")
-
-    if avatar:
-        name = f"{avatar} {name}"
-
-    return name
+    return textprompt.get_input()
 
 
 def add_spaces() -> None:

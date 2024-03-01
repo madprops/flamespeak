@@ -37,9 +37,6 @@ class Screen:
         self.print(f"\nExit: {message}")
         sys.exit(1)
 
-    def input(self, prompt: str) -> str:
-        return input(prompt)
-
     def bottom(self) -> None:
         print(self.term.move(self.term.height, 0))
 

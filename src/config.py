@@ -19,7 +19,7 @@ class Config:
         self.color_1 = "blue"
         self.color_2 = "green"
         self.verbose = False
-        self.nocolors = False
+        self.no_colors = False
         self.compact = False
         self.no_breaks = False
         self.no_intro = False
@@ -41,7 +41,7 @@ class Config:
             "color-2": {"type": str, "help": "The assistant's name"},
             "avatar-1": {"type": str, "help": "The user's avatar"},
             "avatar-2": {"type": str, "help": "The assistant's avatar"},
-            "nocolors": {"action": "store_true", "help": "Don't use colors"},
+            "no-colors": {"action": "store_true", "help": "Don't use colors"},
             "verbose": {"action": "store_true", "help": "Verbose output"},
             "compact": {"action": "store_true", "help": "Don't add spaces between messages"},
             "no-breaks": {"action": "store_true", "help": "Remove all linebreaks"},
@@ -60,7 +60,7 @@ class Config:
 
         normals = [
             "model", "name_1", "name_2", "color_1", "color_2",
-            "avatar_1", "avatar_2", "nocolors", "verbose", "compact",
+            "avatar_1", "avatar_2", "no_colors", "verbose", "compact",
             "no_breaks", "no_intro", "max_tokens", "temperature",
             "no_screen", "system"
         ]
@@ -73,6 +73,9 @@ class Config:
     def check_config(self) -> None:
         if (not self.system) and (self.name_2):
             self.system = f"You are a guy called {self.name_2}"
+
+        self.color_1 = self.color_1.lower()
+        self.color_2 = self.color_2.lower()
 
 
 config = Config()
