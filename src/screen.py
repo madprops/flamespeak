@@ -46,6 +46,10 @@ class Screen:
         def _(event: KeyPressEvent) -> None:
             self.set(self.input_buffer, self.last_prompt)
 
+        @self.kb.add("escape")  # type: ignore
+        def _(event: KeyPressEvent) -> None:
+            self.clear_input()
+
     def print(self, text: str) -> None:
         self.content_buffer.insert_text(f"{text}\n")
 
@@ -57,17 +61,23 @@ class Screen:
         buffer.text = text
         self.cursor_to_end(buffer)
 
+    def cursor_to_start(self, buffer: Buffer) -> None:
+        buffer.cursor_position = 0
+
     def cursor_to_end(self, buffer: Buffer) -> None:
         buffer.cursor_position = len(buffer.text)
 
     def clear_content(self) -> None:
-        self.content_buffer.reset()
+        self.clear_buffer(self.content_buffer)
 
     def clear_input(self) -> None:
-        self.input_buffer.reset()
+        self.clear_buffer(self.input_buffer)
 
     def space(self) -> None:
         self.print("\n")
+
+    def clear_buffer(self, buffer: Buffer) -> None:
+        buffer.text = ""
 
     def duration(self) -> None:
         start = config.Internal.start_time
