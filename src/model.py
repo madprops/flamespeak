@@ -15,11 +15,19 @@ class Model:
         self.mode = None
         self.stream_date = 0
 
-    def prepare(self) -> None:
+    def load(self) -> bool:
+        if not config.model:
+            return False
+
+        if (not config.model.exists()) or (not config.model.is_file()):
+            return False
+
         self.model = Llama(
             model_path=str(config.model),
             verbose=config.verbose,
         )
+
+        return True
 
     async def stream(self, prompt: str) -> None:
         prompt = prompt.strip()

@@ -16,28 +16,32 @@ def get_time() -> float:
     return time.time()
 
 
-def show_seconds(name: str, start: float, end: float) -> None:
+def get_seconds(name: str, start: float, end: float) -> str:
     num = round(start - end, 3)
-    label = utils.colortext("blue", name)
-    screen.print(f"{label}: {num} seconds")
+    return (f"{name}: {num} seconds")
 
 
-def check_time(name: str) -> None:
+def check_time(name: str) -> str:
     if config.no_intro:
         return
 
     global last_time
     now = get_time()
-    show_seconds(name, now, last_time)
+    seconds = get_seconds(name, now, last_time)
     last_time = now
+    return seconds
 
 
 async def main() -> None:
     global last_time
     last_time = config.Internal.start_time
     config.parse_args()
-    model.prepare()
-    screen.prepare()
+
+    if not model.load():
+        return
+
+    duration = check_time("Loading Complete")
+    screen.prepare(duration)
     await screen.run()
 
 if __name__ == "__main__":

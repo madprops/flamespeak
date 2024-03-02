@@ -78,8 +78,13 @@ class Screen:
     def exit(self) -> None:
         self.app.exit()
 
-    def prepare(self) -> None:
+    def prepare(self, duration) -> None:
         content_buffer = Buffer()
+        content_buffer.text = ""
+        content_buffer.insert_text(duration + "\n")
+        content_buffer.insert_text(f"Model: {config.model}\n")
+        content_buffer.insert_text(f"Name 1: {config.name_1}\n")
+        content_buffer.insert_text(f"Name 2: {config.name_2}\n")
         input_buffer = Buffer(multiline=False)
 
         layout = Layout(
