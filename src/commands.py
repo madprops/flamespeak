@@ -1,6 +1,7 @@
 # Modules
 from screen import screen
 from config import config
+from model import model
 
 exit_commands = [
     "quit", "exit", "bye",
@@ -35,6 +36,9 @@ def check_command(prompt: str) -> bool:
 
     return False
 
+def command_print(text: str) -> None:
+    screen.print(f"* {text} *")
+
 
 def change_config(text: str) -> bool:
     words = text.split("=")
@@ -64,7 +68,14 @@ def change_config(text: str) -> bool:
         else:
             return False
 
-        screen.print(f"* {config_name} set to {config_value} *")
+        command_print(f"{config_name} set to {config_value}")
+
+        if config_name == "model":
+            if model.load():
+                command_print("Model loaded")
+            else:
+                command_print("Model failed to load")
+
         return True
 
     return False
