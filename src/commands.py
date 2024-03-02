@@ -2,6 +2,10 @@
 from screen import screen
 from config import config
 from model import model
+from argparser import ArgParser
+
+# Standard
+from typing import Any
 
 exit_commands = [
     "quit", "exit", "bye",
@@ -48,8 +52,9 @@ def change_config(text: str) -> bool:
     if (len(words) >= 2):
         config_name = words[0]
         config_value = " ".join(words[1:])
+        assert isinstance(config.Internal.ap, ArgParser)
 
-        def convert(vtype, value):
+        def convert(vtype: Any, value: Any) -> Any:
             return vtype(value)
 
         if config_name in config.Internal.normals:

@@ -21,7 +21,6 @@ class Config:
         self.verbose = False
         self.compact = False
         self.no_breaks = False
-        self.no_intro = False
         self.max_tokens = 128
         self.temperature = 0.8
         self.system = ""
@@ -43,7 +42,6 @@ class Config:
             "verbose": {"action": "store_true", "help": "Verbose output"},
             "compact": {"action": "store_true", "help": "Don't add spaces between messages"},
             "no-breaks": {"action": "store_true", "help": "Remove all linebreaks"},
-            "no-intro": {"action": "store_true", "help": "Don't show the intro messages"},
             "max-tokens": {"type": int, "help": "Max tokens to use in a single request"},
             "temperature": {"type": float, "help": "The temperature to use in the model"},
             "system": {"type": str, "help": "This tells the model how to act"},
@@ -53,7 +51,6 @@ class Config:
         normals = [
             "name_1", "name_2", "color_1", "color_2",
             "avatar_1", "avatar_2", "verbose", "compact", "no_breaks",
-            "no_intro", "max_tokens", "temperature", "system",
         ]
 
         paths = ["model", "log"]
@@ -64,11 +61,13 @@ class Config:
         self.Internal.ap = ArgParser("Flamespeak", self.Internal.arguments,
                                      self.Internal.aliases, self)
 
-        for normal in config.Internal.normals:
-            config.Internal.ap.normal(normal)
+        assert isinstance(self.Internal.ap, ArgParser)
 
-        for path in config.Internal.paths:
-            config.Internal.ap.path(path)
+        for normal in self.Internal.normals:
+            self.Internal.ap.normal(normal)
+
+        for path in self.Internal.paths:
+            self.Internal.ap.path(path)
 
         self.check_config()
 
@@ -79,7 +78,7 @@ class Config:
         self.color_1 = self.color_1.lower()
         self.color_2 = self.color_2.lower()
 
-    def get_argument(self, name: str) -> Dict[str, Any]:
+    def get_argument(self, name: str) -> Union[Dict[str, Any], None]:
         name = ArgParser.under_to_dash(name)
         return self.Internal.arguments.get(name)
 

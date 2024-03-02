@@ -88,7 +88,7 @@ class Screen:
     def exit(self) -> None:
         self.app.exit()
 
-    def prepare(self, duration) -> None:
+    def prepare(self, duration: str) -> None:
         self.content_buffer = Buffer()
         self.content_buffer.text = ""
         self.content_buffer.insert_text(duration + "\n")

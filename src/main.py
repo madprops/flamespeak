@@ -22,9 +22,6 @@ def get_seconds(name: str, start: float, end: float) -> str:
 
 
 def check_time(name: str) -> str:
-    if config.no_intro:
-        return
-
     global last_time
     now = get_time()
     seconds = get_seconds(name, now, last_time)

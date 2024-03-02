@@ -8,16 +8,19 @@ from llama_cpp import Llama  # type: ignore
 # Standard
 import asyncio
 import time
+from pathlib import Path
 
 
 class Model:
     def __init__(self) -> None:
         self.mode = None
-        self.stream_date = 0
+        self.stream_date = 0.0
 
     def load(self) -> bool:
         if not config.model:
             return False
+
+        assert isinstance(config.model, Path)
 
         if (not config.model.exists()) or (not config.model.is_file()):
             return False
