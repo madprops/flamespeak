@@ -1,6 +1,6 @@
 # Modules
 from argparser import ArgParser
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Union
 
 # Standard
 import time
@@ -50,25 +50,25 @@ class Config:
             "log": {"type": str, "help": "Log conversation to this file"},
         }
 
-        aliases: Dict[str, List[str]] = {}
-
-    def parse_args(self) -> None:
-        ap = ArgParser("Flamespeak", self.Internal.arguments,
-                       self.Internal.aliases, self)
-
         normals = [
             "name_1", "name_2", "color_1", "color_2",
             "avatar_1", "avatar_2", "verbose", "compact", "no_breaks",
             "no_intro", "max_tokens", "temperature", "system",
         ]
 
-        for normal in normals:
-            ap.normal(normal)
-
         paths = ["model", "log"]
+        aliases: Dict[str, List[str]] = {}
+        ap: Union[ArgParser, None] = None
 
-        for path in paths:
-            ap.path(path)
+    def parse_args(self) -> None:
+        self.Internal.ap = ArgParser("Flamespeak", self.Internal.arguments,
+                                     self.Internal.aliases, self)
+
+        for normal in config.Internal.normals:
+            config.Internal.ap.normal(normal)
+
+        for path in config.Internal.paths:
+            config.Internal.ap.path(path)
 
         self.check_config()
 
@@ -78,6 +78,10 @@ class Config:
 
         self.color_1 = self.color_1.lower()
         self.color_2 = self.color_2.lower()
+
+    def get_argument(self, name: str) -> Dict[str, Any]:
+        name = ArgParser.under_to_dash(name)
+        return self.Internal.arguments.get(name)
 
 
 config = Config()

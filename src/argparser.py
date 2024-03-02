@@ -49,14 +49,17 @@ class ArgParser:
 
         return lst
 
-    def normal(self, attr: str) -> None:
-        value = getattr(self.args, attr)
+    def normal(self, attr: str, value: Any = None) -> None:
+        if not value:
+            value = getattr(self.args, attr)
 
         if value is not None:
             self.set(attr, value)
 
-    def commas(self, attr: str, vtype: Any, allow_string: bool = False, is_tuple: bool = False) -> None:
-        value = getattr(self.args, attr)
+    def commas(self, attr: str, vtype: Any, allow_string: bool = False,
+               is_tuple: bool = False, value: Any = None) -> None:
+        if not value:
+            value = getattr(self.args, attr)
 
         if value is not None:
             if "," in value:
@@ -70,15 +73,18 @@ class ArgParser:
             elif allow_string:
                 self.set(attr, value)
 
-    def path(self, attr: str) -> None:
-        value = getattr(self.args, attr)
+    def path(self, attr: str, value: Any = None) -> None:
+        if not value:
+            value = getattr(self.args, attr)
 
         if value is not None:
             self.set(attr, ArgParser.resolve_path(value))
 
     # Allow p1 and m1 formats
-    def number(self, attr: str, vtype: Any, allow_zero: bool = False, duration: bool = False) -> None:
-        value = getattr(self.args, attr)
+    def number(self, attr: str, vtype: Any, allow_zero: bool = False,
+               duration: bool = False, value: Any = None) -> None:
+        if not value:
+            value = getattr(self.args, attr)
 
         if value is None:
             return
