@@ -90,9 +90,6 @@ class Model:
 
             await asyncio.sleep(0.1)
 
-        if token_printed:
-            screen.space()
-
     def space(self) -> None:
         if config.compact:
             return

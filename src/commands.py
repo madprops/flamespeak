@@ -36,6 +36,7 @@ def check_command(prompt: str) -> bool:
 
     return False
 
+
 def command_print(text: str) -> None:
     screen.print(f"* {text} *")
 

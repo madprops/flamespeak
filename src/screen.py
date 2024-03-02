@@ -84,7 +84,7 @@ class Screen:
         content_buffer.insert_text(duration + "\n")
         content_buffer.insert_text(f"Model: {config.model}\n")
         content_buffer.insert_text(f"Name 1: {config.name_1}\n")
-        content_buffer.insert_text(f"Name 2: {config.name_2}\n")
+        content_buffer.insert_text(f"Name 2: {config.name_2}")
         input_buffer = Buffer(multiline=False)
 
         layout = Layout(
