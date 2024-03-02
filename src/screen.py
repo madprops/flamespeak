@@ -89,28 +89,30 @@ class Screen:
         self.app.exit()
 
     def prepare(self, duration) -> None:
-        content_buffer = Buffer()
-        content_buffer.text = ""
-        content_buffer.insert_text(duration + "\n")
-        content_buffer.insert_text(f"Model: {config.model}\n")
-        content_buffer.insert_text(f"Name 1: {config.name_1}\n")
-        content_buffer.insert_text(f"Name 2: {config.name_2}")
-        input_buffer = Buffer(multiline=False)
+        self.content_buffer = Buffer()
+        self.content_buffer.text = ""
+        self.content_buffer.insert_text(duration + "\n")
+        self.content_buffer.insert_text(f"Model: {config.model}\n")
+        self.content_buffer.insert_text(f"Name 1: {config.name_1}\n")
+        self.content_buffer.insert_text(f"Name 2: {config.name_2}")
+        self.input_buffer = Buffer(multiline=False)
 
-        layout = Layout(
-            HSplit([
-                Window(content=BufferControl(buffer=content_buffer), wrap_lines=True),
-                Window(height=1, char="-"),
-                VSplit([
-                    Window(content=FormattedTextControl(FormattedText([("class:prompt", "Input: ")])), dont_extend_width=True),
-                    Window(content=BufferControl(buffer=input_buffer), align=WindowAlign.LEFT, width=Dimension(weight=1)),
-                ], height=1)
-            ])
-        )
+        content_window = Window(content=BufferControl(buffer=self.content_buffer, focus_on_click=True), wrap_lines=True)
 
-        layout.focus(input_buffer)
-        self.content_buffer = content_buffer
-        self.input_buffer = input_buffer
+        input_window = Window(content=BufferControl(buffer=self.input_buffer, focus_on_click=True), \
+                              align=WindowAlign.LEFT, width=Dimension(weight=1))
+
+        prompt_window = Window(content=FormattedTextControl(FormattedText([("class:prompt", "Input: ")])), \
+                               dont_extend_width=True)
+
+        main_split = HSplit([
+            content_window,
+            Window(height=1, char="-"),
+            VSplit([prompt_window, input_window], height=1)
+        ])
+
+        layout = Layout(main_split)
+        layout.focus(self.input_buffer)
         self.app = Application(key_bindings=self.kb, layout=layout, full_screen=True, mouse_support=True)
 
     async def run(self) -> None:
